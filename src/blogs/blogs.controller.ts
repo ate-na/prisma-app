@@ -75,8 +75,8 @@ export const updateBlogs = async (
     update.image = req.file.originalname;
   }
 
-  const selectedBlog = await blogs.updateMany({
-    where: { id: req.params.id, userId: req.user.id },
+  const selectedBlog = await blogs.update({
+    where: { id: req.params.id },
     data: { ...update },
   });
 

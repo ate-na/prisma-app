@@ -1,3 +1,4 @@
+import { restrictedTo } from "./../auth/authentication";
 import {
   validationCreateBlog,
   validationUpdateBlogs,
@@ -12,10 +13,18 @@ import {
   updateBlogs,
 } from "./blogs.controller";
 import { validation } from "../users/user.validation";
+import { UserRole } from "@prisma/client";
 
 const router = express.Router();
 
-router.post("/", upload, validation(validationCreateBlog()), auth, createBlog);
+router.post(
+  "/",
+  upload,
+  validation(validationCreateBlog()),
+  auth,
+  restrictedTo(UserRole.ADMIN),
+  createBlog
+);
 
 router.get("/my-blogs", auth, getMyBlogs);
 
@@ -26,6 +35,7 @@ router.patch(
   upload,
   validation(validationUpdateBlogs()),
   auth,
+  restrictedTo(UserRole.ADMIN),
   updateBlogs
 );
 

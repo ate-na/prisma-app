@@ -46,3 +46,12 @@ export const generateToken = (id: string, role: string) => {
     expiresIn: process.env.EXPIREIN,
   });
 };
+
+export const restrictedTo = (...roles) => {
+  return (req: RequestType, res: Response, next: NextFunction) => {
+    if (!roles.includes(req.user.role)) {
+      return res.status(403).send({ message: "You do not have permission!" });
+    }
+    next();
+  };
+};
